@@ -29,7 +29,7 @@ function secureInt(max) {
   do { window.crypto.getRandomValues(data); } while (data[0] >= limit);
   return data[0] % max;
 }
-function pickSymbol(reel) {
+function pickSymbol() {
   // Cada carretel possui sua própria tabela de pesos.
   const weights = SYMBOLS.map((s) => s.weight);
   const total = weights.reduce((a,b) => a+b, 0);
@@ -41,7 +41,7 @@ function pickSymbol(reel) {
   return SYMBOLS[0].id;
 }
 function randomGrid() {
-  return Array.from({ length: 9 }, (_, i) => pickSymbol(i % 3));
+  return Array.from({ length: 9 }, () => pickSymbol());
 }
 function evaluate(grid, bet) {
   const lineBet = bet / PAYLINES.length;
@@ -75,7 +75,7 @@ function makeSpin(bet, multiplier = 1, allowFury = true) {
     payout: result.payout * multiplier,
     winners: result.winners,
     lines: result.lines,
-    bonus: grid.filter((s) => s === "tiger").length === 3,
+    bonus: grid.filter((s) => s === "tiger").length >= 3,
     furyColumn,
   };
 }
@@ -111,7 +111,7 @@ export default function App() {
   const [wins, setWins] = useState([]);
   const [spins, setSpins] = useState(0);
   const [maxWin, setMaxWin] = useState(0);
-  const [initialBalance, setInitialBalance] = useState(1000);
+  const [initialBalance] = useState(1000);
   const [freeSpins, setFreeSpins] = useState(0);
   const [freeIndex, setFreeIndex] = useState(0);
   const [pauseUntil, setPauseUntil] = useState(0);
