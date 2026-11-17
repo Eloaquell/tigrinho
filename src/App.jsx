@@ -145,7 +145,7 @@ export default function App() {
         const today = new Date().toLocaleDateString("en-CA");
         if (saved.giftDate !== today) {
           setBalance((v) => v + 500);
-          setStatus("🎁 Bônus diário de 500 moedas recebido!");
+          setStatus("🎁 Crédito diário fictício de R$ 500,00 adicionado!");
           localStorage.setItem(STORAGE_KEY, JSON.stringify({ ...saved, giftDate: today }));
         }
       } else {
