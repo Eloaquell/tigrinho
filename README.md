@@ -1,16 +1,50 @@
-# React + Vite
+# Tigrinho da Sorte
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Jogo demonstrativo de caça-níquel em React, com tema de tigre e **moedas exclusivamente virtuais**.
 
-Currently, two official plugins are available:
+> **Aviso:** este projeto é apenas para entretenimento e demonstração. Não aceita depósitos, não realiza pagamentos e não permite converter moedas virtuais em dinheiro real. Não há promessa de ganhos.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Recursos
 
-## React Compiler
+- Grade de símbolos 3×3 e cinco linhas de pagamento.
+- Tigre como símbolo curinga e recurso especial Tigre Furioso.
+- Rodadas bônus com giros grátis e multiplicador crescente.
+- Apostas virtuais ajustáveis, modo turbo e giros automáticos.
+- Saldo, estatísticas da sessão e histórico das últimas rodadas.
+- Preferências e saldo salvos localmente no navegador.
+- Efeitos sonoros opcionais e lembretes de pausa.
+- Simulador estatístico para observar o comportamento das rodadas.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Tecnologias
 
-## Expanding the ESLint configuration
+- React
+- Vite
+- JavaScript
+- CSS
+- Web Audio API e Web Crypto API do navegador
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Executar localmente
+
+Requer Node.js compatível com a versão do Vite instalada.
+
+```bash
+npm install
+npm run dev
+```
+
+Para gerar a versão de produção:
+
+```bash
+npm run build
+npm run preview
+```
+
+## Observações sobre probabilidades
+
+O jogo usa sorteio criptograficamente seguro do navegador para selecionar os resultados. O RTP exibido nas regras é **apenas uma referência informativa de 96%**, não uma garantia nem um valor matematicamente calibrado. O simulador apresenta resultados observados em uma amostra e pode variar a cada execução.
+
+## Estrutura principal
+
+- `src/App.jsx`: lógica e interface do jogo.
+- `src/index.css`: estilos globais.
+- `index.html`: documento inicial da aplicação.
