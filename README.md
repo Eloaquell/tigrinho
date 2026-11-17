@@ -1,19 +1,20 @@
 # Tigrinho da Sorte
 
-Jogo demonstrativo de caça-níquel em React, com tema de tigre e **moedas exclusivamente virtuais**.
+Simulador demonstrativo de caça-níquel em React, com visual de cassino e valores **fictícios formatados em reais (R$)**.
 
-> **Aviso:** este projeto é apenas para entretenimento e demonstração. Não aceita depósitos, não realiza pagamentos e não permite converter moedas virtuais em dinheiro real. Não há promessa de ganhos.
+> **Importante:** R$ é apenas a formatação visual de créditos simulados. Este projeto não aceita depósitos, não processa apostas com dinheiro real, não realiza saques e não representa uma atividade financeira ou promessa de ganhos.
 
 ## Recursos
 
 - Grade de símbolos 3×3 e cinco linhas de pagamento.
 - Tigre como símbolo curinga e recurso especial Tigre Furioso.
 - Rodadas bônus com giros grátis e multiplicador crescente.
-- Apostas virtuais ajustáveis, modo turbo e giros automáticos.
-- Saldo, estatísticas da sessão e histórico das últimas rodadas.
-- Preferências e saldo salvos localmente no navegador.
-- Efeitos sonoros opcionais e lembretes de pausa.
-- Simulador estatístico para observar o comportamento das rodadas.
+- Valores de aposta e saldo simulados exibidos em R$.
+- Ritmo de animação mais rápido, com modo turbo.
+- Frequência de combinações vencedoras reduzida em relação à configuração anterior.
+- Estatísticas da sessão e histórico das últimas rodadas.
+- Preferências e saldo de demonstração salvos localmente.
+- Efeitos sonoros opcionais, lembretes de pausa e simulador estatístico.
 
 ## Tecnologias
 
@@ -39,9 +40,9 @@ npm run build
 npm run preview
 ```
 
-## Observações sobre probabilidades
+## Probabilidades
 
-O jogo usa sorteio criptograficamente seguro do navegador para selecionar os resultados. O RTP exibido nas regras é **apenas uma referência informativa de 96%**, não uma garantia nem um valor matematicamente calibrado. O simulador apresenta resultados observados em uma amostra e pode variar a cada execução.
+Os pesos dos símbolos foram alterados para tornar as combinações vencedoras menos frequentes. Isso não representa uma probabilidade calibrada de cassino. O RTP é indicado como **não calibrado**; os resultados do simulador são amostras variáveis, não garantias nem previsões.
 
 ## Estrutura principal
 
