@@ -124,6 +124,7 @@ export default function App() {
   const [effects, setEffects] = useState([]);
   const [simResult, setSimResult] = useState(null);
   const audioRef = useRef(null);
+  const storageReady = useRef(false);
   const spinLock = useRef(false);
   const freeRef = useRef({ freeSpins: 0, freeIndex: 0 });
   const autoRef = useRef(0);
@@ -153,9 +154,11 @@ export default function App() {
         setBalance(1500);
       }
     } catch (error) { console.warn("Não foi possível restaurar o jogo.", error); }
+    finally { storageReady.current = true; }
   }, []);
 
   useEffect(() => {
+    if (!storageReady.current) return;
     try {
       const giftDate = new Date().toLocaleDateString("en-CA");
       localStorage.setItem(STORAGE_KEY, JSON.stringify({ balance, bet, turbo, muted, giftDate }));
