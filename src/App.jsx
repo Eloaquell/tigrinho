@@ -7,19 +7,19 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
  */
 
 const SYMBOLS = [
-  { id: "orange", label: "Laranja", icon: "🍊", weight: 34, pay: 2 },
-  { id: "firecracker", label: "Petardo", icon: "🧨", weight: 24, pay: 3 },
-  { id: "bag", label: "Saco de moedas", icon: "💰", weight: 18, pay: 5 },
-  { id: "lantern", label: "Lanterna", icon: "🏮", weight: 13, pay: 8 },
-  { id: "coin", label: "Moeda dourada", icon: "🪙", weight: 9, pay: 15 },
-  { id: "tiger", label: "Tigre (curinga)", icon: "🐯", weight: 2, pay: 30 },
+  { id: "orange", label: "Laranja", icon: "🍊", weight: 26, pay: 2 },
+  { id: "firecracker", label: "Petardo", icon: "🧨", weight: 23, pay: 3 },
+  { id: "bag", label: "Saco de moedas", icon: "💰", weight: 20, pay: 5 },
+  { id: "lantern", label: "Lanterna", icon: "🏮", weight: 17, pay: 8 },
+  { id: "coin", label: "Moeda dourada", icon: "🪙", weight: 13, pay: 15 },
+  { id: "tiger", label: "Tigre (curinga)", icon: "🐯", weight: 1, pay: 30 },
 ];
 const PAYLINES = [[0,1,2],[3,4,5],[6,7,8],[0,4,8],[6,4,2]];
 const BETS = [1, 2, 5, 10, 25, 50];
 const STORAGE_KEY = "tigrinho_sorte_react_v1";
 const BONUS_SPINS = 8;
 const FURY_CHANCE = 0.0025;
-const RTP_REFERENCE = 96;
+const RTP_REFERENCE = "não calibrado";
 
 function secureInt(max) {
   if (!Number.isSafeInteger(max) || max < 1) throw new Error("Limite aleatório inválido.");
@@ -195,7 +195,7 @@ export default function App() {
   }, [muted]);
 
   const cells = useMemo(() => SYMBOLS.reduce((acc, s) => ({ ...acc, [s.id]: s }), {}), []);
-  const money = (n) => Math.floor(n).toLocaleString("pt-BR");
+  const money = (n) => Number(n).toLocaleString("pt-BR", { style: "currency", currency: "BRL", minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
   const spin = useCallback(async () => {
     if (spinLock.current || Date.now() < pauseUntil) return;
@@ -207,19 +207,19 @@ export default function App() {
     const multiplier = free ? freeRef.current.freeIndex + 1 : 1;
     setStatus(free ? `GIRO GRÁTIS · MULTIPLICADOR x${multiplier}` : "Os rolos estão girando...");
     playSound("spin");
-    const duration = reducedMotion ? 50 : (turbo ? 420 : 1250);
+    const duration = reducedMotion ? 40 : (turbo ? 260 : 780);
     const start = performance.now();
     await new Promise((resolve) => {
       const animate = (now) => {
         if (now-start >= duration*.78) return resolve();
         setGrid(randomGrid());
-        window.setTimeout(() => requestAnimationFrame(animate), 90);
+        window.setTimeout(() => requestAnimationFrame(animate), 55);
       };
       requestAnimationFrame(animate);
     });
     const result = makeSpin(bet, multiplier, !free);
     for (let col=0; col<3; col++) {
-      await new Promise((r) => window.setTimeout(r, turbo ? 35 : 160));
+      await new Promise((r) => window.setTimeout(r, turbo ? 25 : 85));
       setGrid((old) => {
         const next = [...old];
         for (let row=0; row<3; row++) next[row*3+col] = result.grid[row*3+col];
@@ -230,7 +230,7 @@ export default function App() {
     if (result.furyColumn >= 0) {
       setStatus("🐯 TIGRE FURIOSO! Uma coluna virou curinga!");
       playSound("fury");
-      await new Promise((r) => window.setTimeout(r, turbo ? 80 : 450));
+      await new Promise((r) => window.setTimeout(r, turbo ? 60 : 220));
     }
     setGrid(result.grid);
     const prize = Math.floor(result.payout);
@@ -240,7 +240,7 @@ export default function App() {
     setMaxWin((v) => Math.max(v, prize));
     if (prize > 0) {
       const level = prize >= bet*30 ? "MEGA VITÓRIA!" : prize >= bet*10 ? "INCRÍVEL!" : "Boa!";
-      setBanner(level); setStatus(`Você ganhou ${money(prize)} moedas!`);
+      setBanner(level); setStatus(`Você ganhou ${money(prize)} (saldo fictício)!`);
       playSound("win");
       if (navigator.vibrate) { try { navigator.vibrate(prize >= bet*10 ? [100,50,150] : 70); } catch {} }
     } else setStatus(result.bonus ? "🐯 TRÊS TIGRES! BÔNUS ATIVADO!" : "Tente novamente!");
@@ -325,14 +325,14 @@ export default function App() {
         <header className="game-header">
           <div className="kicker">✦ FESTIVAL DA FORTUNA ✦</div>
           <h1>Tigrinho da Sorte</h1>
-          <p>Uma aventura de sorte com moedas virtuais 🐯</p>
+          <p>Simulação de caça-níquel com valores fictícios em reais 🐯</p>
         </header>
         <section className="machine" aria-label="Máquina de caça-níquel virtual">
           <div className="lights" aria-hidden="true">{Array.from({length:9},(_,i)=><i key={i}/>)}</div>
           <div className="mascot-wrap"><TigerMascot mode={busy ? "spin" : banner ? "win" : ""}/><span className="speech">{banner || (busy ? "Girando!" : "Boa sorte!")}</span></div>
           <div className="balances">
-            <div><small>Saldo virtual</small><strong>{money(balance)} 🪙</strong></div>
-            <div><small>Prêmio da rodada</small><strong>{money(lastWin)} 🪙</strong></div>
+            <div><small>Saldo simulado</small><strong>{money(balance)}</strong></div>
+            <div><small>Prêmio simulado</small><strong>{money(lastWin)}</strong></div>
           </div>
           <div className="reel-frame">
             <div className="reels" aria-label="Grade de símbolos 3 por 3">
@@ -343,7 +343,7 @@ export default function App() {
           <div className="banner">{banner}</div>
           <div className="bet-control">
             <button aria-label="Diminuir aposta" disabled={busy || bet===BETS[0]} onClick={()=>changeBet(-1)}>−</button>
-            <div><strong>{bet} moedas</strong><small>APOSTA TOTAL</small></div>
+            <div><strong>{money(bet)}</strong><small>VALOR SIMULADO</small></div>
             <button aria-label="Aumentar aposta" disabled={busy || bet===BETS[BETS.length-1]} onClick={()=>changeBet(1)}>+</button>
           </div>
           <div className="controls">
@@ -364,7 +364,7 @@ export default function App() {
             <div><small>Maior prêmio</small><strong>{money(maxWin)}</strong></div>
             <div><small>Saldo inicial</small><strong>{money(initialBalance)}</strong></div>
           </div>
-          <div className="current-stat"><small>Saldo atual</small><strong>{money(balance)}</strong></div>
+          <div className="current-stat"><small>Saldo atual simulado</small><strong>{money(balance)}</strong></div>
         </section>
         <section className="panel">
           <h2>🧾 HISTÓRICO — ÚLTIMOS 20 GIROS</h2>
@@ -375,7 +375,7 @@ export default function App() {
           <button onClick={pauseFive}>⏸ Pausa de 5 minutos</button>
         </div>
       </main>
-      <div className="responsible">Jogo de entretenimento com moedas virtuais. Sem dinheiro real. Conteúdo 18+.</div>
+      <div className="responsible">SIMULAÇÃO: valores fictícios em R$. Sem depósitos, apostas reais ou saques. Não representa dinheiro ou ganhos reais.</div>
 
       {modal && <div className="modal" role="presentation" onMouseDown={(e)=>e.target===e.currentTarget && setModal("")}>
         <section className="dialog" role="dialog" aria-modal="true" aria-labelledby="dialog-title">
@@ -385,33 +385,33 @@ export default function App() {
             <p>Combine três símbolos iguais em uma das cinco linhas (três horizontais e duas diagonais). O tigre é curinga. A aposta total é dividida igualmente entre as cinco linhas.</p>
             <table><thead><tr><th>Símbolo</th><th>Multiplicador por linha</th></tr></thead><tbody>{SYMBOLS.map(s=><tr key={s.id}><td>{s.icon} {s.label}</td><td>x{s.pay}</td></tr>)}</tbody></table>
             <p><b>Bônus:</b> três tigres na tela ativam 8 giros grátis, com multiplicador crescente de x1 a x8. O Tigre Furioso tem chance de 0,25% por giro normal e transforma uma coluna inteira em curinga.</p>
-            <p><b>RTP de referência: {RTP_REFERENCE}%.</b> É uma meta informativa, não uma garantia. O valor efetivo deve ser conferido no simulador.</p>
-            <p>Somente moedas virtuais, sem pagamentos ou conversão em dinheiro.</p>
+            <p><b>RTP: {RTP_REFERENCE}.</b> As probabilidades são experimentais e não foram calibradas para uma taxa de retorno específica.</p>
+            <p>Os valores exibidos em reais são fictícios. Não há pagamentos, depósitos ou conversão em dinheiro.</p>
           </>}
           {modal==="auto" && <>
-            <h2 id="dialog-title">Giro automático</h2><p>Escolha a quantidade de giros. O modo para quando um prêmio atingir {autoStopWin} moedas.</p>
+            <h2 id="dialog-title">Giro automático</h2><p>Escolha a quantidade de giros. O modo para quando um prêmio simulado atingir {money(autoStopWin)}.</p>
             <div className="modal-buttons">{[10,25,50].map(n=><button className="gold-button" key={n} onClick={()=>startAuto(n)}>{n} giros</button>)}</div>
             {autoRemaining>0 && <button className="gold-button" onClick={()=>setAutoRemaining(0)}>Parar automático</button>}
           </>}
           {modal==="settings" && <>
             <h2 id="dialog-title">⚙ Configurações e simulador</h2>
-            <p>RTP de referência: {RTP_REFERENCE}% · Tigre Furioso: {(FURY_CHANCE*100).toFixed(2)}% por giro normal.</p>
+            <p>RTP: {RTP_REFERENCE} · Tigre Furioso: {(FURY_CHANCE*100).toFixed(2)}% por giro normal.</p>
             <button className="gold-button" onClick={runSimulation}>🧪 Testar 100 mil giros</button>
             {simResult && <div className="simulation">
               <h3>Resultado observado</h3>
               <p><b>RTP observado:</b> {simResult.rtp.toFixed(2)}%</p>
               <p><b>Frequência de vitórias:</b> {simResult.frequency.toFixed(2)}%</p>
-              <p><b>Maior prêmio:</b> {money(simResult.highest)} moedas</p>
+              <p><b>Maior prêmio:</b> {money(simResult.highest)}</p>
               <p><b>Giros contabilizados:</b> {money(simResult.allSpins)} (inclui bônus)</p>
               <p><b>Bônus ativados:</b> {money(simResult.bonusCount)}</p>
-              <p><b>Total apostado:</b> {money(simResult.totalBet)} · <b>Total pago:</b> {money(simResult.totalPaid)}</p>
+              <p><b>Total simulado:</b> {money(simResult.totalBet)} · <b>Total distribuído:</b> {money(simResult.totalPaid)}</p>
             </div>}
-            <p className="muted">A simulação não altera seu saldo. Os giros grátis não acrescentam aposta ao denominador do RTP.</p>
+            <p className="muted">A simulação estatística não altera seu saldo. Os giros grátis não acrescentam valor apostado ao denominador.</p>
           </>}
           {modal==="empty" && <>
-            <h2 id="dialog-title">As moedas acabaram!</h2><p>Recarregue gratuitamente suas moedas virtuais para continuar se divertindo.</p>
-            <div className="big-prize">+1.000 🪙</div>
-            <button className="gold-button" onClick={()=>{setBalance(v=>v+1000);setModal("");setStatus("1.000 moedas virtuais gratuitas adicionadas!");}}>Recarregar moedas virtuais</button>
+            <h2 id="dialog-title">Saldo simulado esgotado</h2><p>Adicione créditos fictícios para continuar testando. Nenhum dinheiro real é movimentado.</p>
+            <div className="big-prize">+R$ 1.000,00 fictícios</div>
+            <button className="gold-button" onClick={()=>{setBalance(v=>v+1000);setModal("");setStatus("Crédito fictício de R$ 1.000,00 adicionado!");}}>Adicionar saldo fictício</button>
           </>}
         </section>
       </div>}
