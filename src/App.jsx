@@ -18,7 +18,8 @@ const PAYLINES = [[0,1,2],[3,4,5],[6,7,8],[0,4,8],[6,4,2]];
 const BETS = [1, 2, 5, 10, 25, 50];
 const STORAGE_KEY = "tigrinho_sorte_react_v1";
 const BONUS_SPINS = 8;
-const FURY_CHANCE = 0.0025;\nconst AUTO_FURY_EARLY_CHANCE = 0.05; // chance experimental maior nos 3 primeiros giros de cada Auto
+const FURY_CHANCE = 0.0025;
+const AUTO_FURY_EARLY_CHANCE = 0.05; // chance experimental maior nos 3 primeiros giros de cada Auto
 const RTP_REFERENCE = "não calibrado";
 
 function secureInt(max) {
@@ -127,8 +128,9 @@ export default function App() {
   const storageReady = useRef(false);
   const spinLock = useRef(false);
   const freeRef = useRef({ freeSpins: 0, freeIndex: 0 });
-  const autoRef = useRef(0);\n  const autoFuryEarlySpins = useRef(0);
-  const reducedMotion = useMemo(() => window.matchMedia?.("(prefers-reduced-motion: reduce)").matches, []);
+  const autoRef = useRef(0);
+  const autoFuryEarlySpins = useRef(0);
+  const reducedMotion = useMemo(() => window.matchMedia?.("(prefers-reduced-motion: reduce)").matches ?? false, []);
 
   useEffect(() => { freeRef.current = { freeSpins, freeIndex }; }, [freeSpins, freeIndex]);
   useEffect(() => { autoRef.current = autoRemaining; }, [autoRemaining]);
@@ -217,7 +219,10 @@ export default function App() {
       };
       requestAnimationFrame(animate);
     });
-    const autoActive = autoRef.current > 0;\n    const earlyAutoFury = autoActive && autoFuryEarlySpins.current > 0;\n    const result = makeSpin(bet, multiplier, !free, earlyAutoFury ? AUTO_FURY_EARLY_CHANCE : FURY_CHANCE);\n    if (autoActive && autoFuryEarlySpins.current > 0) autoFuryEarlySpins.current -= 1;
+    const autoActive = autoRef.current > 0;
+    const earlyAutoFury = autoActive && autoFuryEarlySpins.current > 0;
+    const result = makeSpin(bet, multiplier, !free, earlyAutoFury ? AUTO_FURY_EARLY_CHANCE : FURY_CHANCE);
+    if (autoActive && autoFuryEarlySpins.current > 0) autoFuryEarlySpins.current -= 1;
     for (let col=0; col<3; col++) {
       await new Promise((r) => window.setTimeout(r, turbo ? 25 : 85));
       setGrid((old) => {
@@ -280,6 +285,8 @@ export default function App() {
   }, [pauseUntil, lastBreak, breakVisible, sessionStart]);
 
   const startAuto = (count) => {
+    autoRef.current = count;
+    autoFuryEarlySpins.current = 3;
     setAutoRemaining(count); setModal(""); window.setTimeout(() => spin(), 0);
   };
   const pauseFive = () => {
@@ -391,7 +398,7 @@ export default function App() {
           {modal==="auto" && <>
             <h2 id="dialog-title">Giro automático</h2><p>Escolha a quantidade de giros. O modo para quando um prêmio simulado atingir {money(autoStopWin)}.</p>
             <div className="modal-buttons">{[10,25,50].map(n=><button className="gold-button" key={n} onClick={()=>startAuto(n)}>{n} giros</button>)}</div>
-            {autoRemaining>0 && <button className="gold-button" onClick={()=>setAutoRemaining(0)}>Parar automático</button>}
+            {autoRemaining>0 && <button className="gold-button" onClick={()=>{autoRef.current=0;setAutoRemaining(0);}}>Parar automático</button>}
           </>}
           {modal==="settings" && <>
             <h2 id="dialog-title">⚙ Configurações e simulador</h2>
@@ -402,8 +409,8 @@ export default function App() {
               <p><b>RTP observado:</b> {simResult.rtp.toFixed(2)}%</p>
               <p><b>Frequência de vitórias:</b> {simResult.frequency.toFixed(2)}%</p>
               <p><b>Maior prêmio:</b> {money(simResult.highest)}</p>
-              <p><b>Giros contabilizados:</b> {money(simResult.allSpins)} (inclui bônus)</p>
-              <p><b>Bônus ativados:</b> {money(simResult.bonusCount)}</p>
+              <p><b>Giros contabilizados:</b> {simResult.allSpins.toLocaleString("pt-BR")} (inclui bônus)</p>
+              <p><b>Bônus ativados:</b> {simResult.bonusCount.toLocaleString("pt-BR")}</p>
               <p><b>Total simulado:</b> {money(simResult.totalBet)} · <b>Total distribuído:</b> {money(simResult.totalPaid)}</p>
             </div>}
             <p className="muted">A simulação estatística não altera seu saldo. Os giros grátis não acrescentam valor apostado ao denominador.</p>
