@@ -324,7 +324,7 @@ export default function App() {
       <main className="game-shell">
         <header className="game-header">
           <div className="kicker">✦ FESTIVAL DA FORTUNA ✦</div>
-          <h1>Tigrinho da Sorte</h1>
+          <h1>Tigrinho do Azar</h1>
           <p>Simulação de caça-níquel com valores fictícios em reais 🐯</p>
         </header>
         <section className="machine" aria-label="Máquina de caça-níquel virtual">
