@@ -336,60 +336,25 @@ export default function App() {
       <div className="particles" aria-hidden="true">
         {effects.map((p) => <i key={p.id} style={{ left:`${p.left}%`, animationDelay:`${p.delay}s`, animationDuration:`${p.duration}s` }} />)}
       </div>
-      <main className="game-shell">
-        <header className="game-header">
-          <div className="kicker">✦ FESTIVAL DA FORTUNA ✦</div>
-          <h1>Tigrinho do Azar</h1>
-          <p>Simulação de caça-níquel com valores fictícios em reais 🐯</p>
-        </header>
-        <section className="machine" aria-label="Máquina de caça-níquel virtual">
-          <div className="lights" aria-hidden="true">{Array.from({length:9},(_,i)=><i key={i}/>)}</div>
-          <div className="mascot-wrap"><TigerMascot mode={busy ? "spin" : banner ? "win" : ""}/><span className="speech">{banner || (busy ? "Girando!" : "Boa sorte!")}</span></div>
-          <div className="balances">
-            <div><small>Saldo simulado</small><strong>{money(balance)}</strong></div>
-            <div><small>Prêmio simulado</small><strong>{money(lastWin)}</strong></div>
-          </div>
-          <div className="reel-frame">
-            <div className="reels" aria-label="Grade de símbolos 3 por 3">
-              {grid.map((id, i) => <div className={`cell ${!busy && lastWin>0 ? "winner" : ""}`} key={i} aria-label={cells[id].label}><span>{cells[id].icon}</span></div>)}
+      <main className="game-shell redesign-shell">
+        <header className="game-header redesign-header"><div className="kicker">✦ FESTIVAL DA FORTUNA ✦</div><h1>Tigrinho do Azar</h1><p>Simulação com valores fictícios 🐯</p></header>
+        <section className="machine redesign-machine" aria-label="Máquina virtual">
+          <div className="redesign-lights" aria-hidden="true">{Array.from({length:24},(_,i)=><i key={i}/>)}</div>
+          <div className="redesign-title"><TigerMascot mode={busy ? "spin" : banner ? "win" : ""}/><div><span>✦ ✦ ✦</span><h2>Tigrinho do Azar</h2></div></div>
+          <div className="machine-layout">
+            <aside className="side-panel credit-side"><h3>＋ Adicionar saldo</h3><div className="side-balance">{money(balance)}</div><div className="credit-options">{[50,20,10,5,1].map(amount=><button key={amount} className="credit-button" onClick={()=>{setBalance(v=>v+amount);setStatus("Crédito fictício adicionado: "+money(amount));playSound("click");}}>＋ {money(amount)}</button>)}</div><button className="credit-step" disabled={balance<=0} onClick={()=>{setBalance(v=>Math.max(0,v-10));setStatus("Saldo simulado reduzido em R$ 10,00.");playSound("click");}}>− R$ 10,00</button></aside>
+            <div className="reel-center"><div className="balance-strip"><div><small>Saldo</small><strong>{money(balance)}</strong></div><div><small>Prêmio</small><strong>{money(lastWin)}</strong></div></div>
+              <div className="reel-frame redesign-reel-frame"><div className="reels" aria-label="Grade 3 por 3">{grid.map((id,i)=><div className={!busy&&lastWin>0?"cell winner":"cell"} key={i} aria-label={cells[id].label}><span>{cells[id].icon}</span></div>)}</div></div>
+              <div className="status" aria-live="polite">{status}</div><div className="banner">{banner}</div>
+              <div className="bet-control"><button aria-label="Diminuir aposta" disabled={busy||bet===BETS[0]} onClick={()=>changeBet(-1)}>−</button><div><small>APOSTA</small><strong>{money(bet)}</strong></div><button aria-label="Aumentar aposta" disabled={busy||bet===BETS[BETS.length-1]} onClick={()=>changeBet(1)}>+</button></div>
+              <div className="redesign-controls"><button className="secondary" onClick={()=>setModal("auto")} disabled={busy}>⟳ AUTO</button><button className="primary" onClick={spin} disabled={busy||(balance<bet&&freeSpins===0)||Date.now()<pauseUntil}>🐯 GIRAR</button><button className="secondary" onClick={()=>setBet(BETS[BETS.length-1])}>★ APOSTA MÁX.</button></div>
             </div>
+            <aside className="side-panel payout-side"><h3>🏆 Payouts</h3>{SYMBOLS.map(s=><div className="payout-row" key={s.id}><span>{s.icon}</span><b>{s.pay}x</b></div>)}<button className={turbo?"turbo-switch selected":"turbo-switch"} aria-pressed={turbo} onClick={()=>setTurbo(v=>!v)}>⚡ Modo Turbo {turbo?"ON":"OFF"}</button></aside>
           </div>
-          <div className="status" aria-live="polite">{status}</div>
-          <div className="banner">{banner}</div>
-          <div className="bet-control">
-            <button aria-label="Diminuir aposta" disabled={busy || bet===BETS[0]} onClick={()=>changeBet(-1)}>−</button>
-            <div><strong>{money(bet)}</strong><small>VALOR SIMULADO</small></div>
-            <button aria-label="Aumentar aposta" disabled={busy || bet===BETS[BETS.length-1]} onClick={()=>changeBet(1)}>+</button>
-          </div>
-          <div className="controls">
-            <button className="secondary" onClick={()=>setModal("auto")} disabled={busy}>AUTO</button>
-            <button className="primary" onClick={spin} disabled={busy || (balance<bet && freeSpins===0) || Date.now()<pauseUntil}>🐯 GIRAR</button>
-            <button className={`secondary ${turbo?"selected":""}`} aria-pressed={turbo} onClick={()=>setTurbo(v=>!v)}>⚡ TURBO</button>
-          </div>
-          <div className="credit-control"><div className="credit-options">{[1,5,10,20,50].map(amount=><button key={amount} className="credit-button" onClick={()=>{setBalance(v=>v+amount);setStatus(`R$ ${amount.toFixed(2).replace(".",",")} de saldo fictício adicionado!`);playSound("click");}}>＋ R$ {amount.toFixed(2).replace(".",",")}</button>)}</div><button className="credit-step" disabled={balance<=0} onClick={()=>{setBalance(v=>Math.max(0,v-10));setStatus("Saldo fictício reduzido em R$ 10,00.");playSound("click");}}>− R$ 10,00</button></div>
-          <div className="controls extra">
-            <button className="secondary" onClick={()=>setModal("rules")}>📜 Regras</button>
-            <button className="secondary" onClick={()=>setModal("settings")}>⚙ Configurações</button>
-          </div>
+          <div className="redesign-bottom"><button className="secondary" onClick={()=>setModal("rules")}>ⓘ Regras</button><button className="secondary" onClick={()=>setModal("settings")}>⚙ Config.</button><button className="secondary" onClick={()=>setModal("auto")}>⟳ Auto</button><button className="secondary" onClick={()=>setMuted(v=>!v)}>{muted?"🔇":"🔊"}</button><button className="secondary" onClick={pauseFive}>⏸ Pausa</button></div>
         </section>
-
-        <section className="panel">
-          <h2>📊 ESTATÍSTICAS DA SESSÃO</h2>
-          <div className="stats">
-            <div><small>Giros</small><strong>{spins}</strong></div>
-            <div><small>Maior prêmio</small><strong>{money(maxWin)}</strong></div>
-            <div><small>Saldo inicial</small><strong>{money(initialBalance)}</strong></div>
-          </div>
-          <div className="current-stat"><small>Saldo atual simulado</small><strong>{money(balance)}</strong></div>
-        </section>
-        <section className="panel">
-          <h2>🧾 HISTÓRICO — ÚLTIMOS 20 GIROS</h2>
-          <div className="history">{history.length ? history.map((h,i)=><div className="history-row" key={`${h.n}-${i}`}><span>#{h.n} · {h.symbols}</span><b>{h.prize ? `+${money(h.prize)}` : "—"}</b></div>) : <div className="history-row">Aguardando primeira rodada</div>}</div>
-        </section>
-        <div className="footer-actions">
-          <button onClick={()=>setMuted(v=>!v)}>{muted?"🔇 Som desligado":"🔊 Som ligado"}</button>
-          <button onClick={pauseFive}>⏸ Pausa de 5 minutos</button>
-        </div>
+        <section className="panel"><h2>📊 Estatísticas da sessão</h2><div className="stats"><div><small>Giros</small><strong>{spins}</strong></div><div><small>Maior prêmio</small><strong>{money(maxWin)}</strong></div><div><small>Saldo inicial</small><strong>{money(initialBalance)}</strong></div></div><div className="current-stat"><small>Saldo atual simulado</small><strong>{money(balance)}</strong></div></section>
+        <section className="panel"><h2>🧾 Histórico — últimos 20 giros</h2><div className="history">{history.length?history.map((h,i)=><div className="history-row" key={h.n+"-"+i}><span># {h.n} · {h.symbols}</span><b>{h.prize?"+"+money(h.prize):"—"}</b></div>):<div className="history-row">Aguardando primeira rodada</div>}</div></section>
       </main>
       <div className="responsible">SIMULAÇÃO: valores fictícios em R$. Sem depósitos, apostas reais ou saques. Não representa dinheiro ou ganhos reais.</div>
 
@@ -470,4 +435,15 @@ const styles = `
 .modal{position:fixed;z-index:10;inset:0;background:#100207dc;display:flex;align-items:center;justify-content:center;padding:16px}.dialog{width:min(100%,480px);max-height:86vh;overflow:auto;background:linear-gradient(145deg,#821a23,#350911);border:2px solid #e7b84e;border-radius:18px;padding:18px;box-shadow:0 20px 60px #000b}.dialog h2{margin:0 0 10px;color:#ffe18a;font-family:Georgia,serif}.dialog h3{color:#ffe18a}.dialog p,.dialog li{font-size:.84rem;line-height:1.45;color:#ffe9c0}.dialog table{width:100%;border-collapse:collapse;font-size:.8rem}.dialog td,.dialog th{padding:7px;border-bottom:1px solid #d9a34c66;text-align:left}.dialog th{color:#ffdf8e}.close{float:right;border:0;background:transparent;color:#ffe6a2;font-size:1.4rem}.modal-buttons{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}.modal-buttons>*{flex:1}.gold-button{margin:5px 0}.big-prize{font-size:2rem;font-weight:1000;color:#ffe28b;text-align:center;margin:12px}.simulation{margin-top:12px;padding:10px;border-radius:10px;background:#5d141d}.muted{opacity:.7}
 @media(min-width:600px){.game-shell{padding-top:10px}.cell{font-size:3.6rem}}
 @media(prefers-reduced-motion:reduce){.tiger-app *, .tiger-app *:before,.tiger-app *:after{animation-duration:.001ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition:none!important}}
+
+.redesign-shell{width:min(100%,1180px);padding-top:12px}.redesign-header h1,.redesign-header p{display:none}
+.redesign-machine{padding:clamp(12px,2vw,22px);border-radius:32px;background:linear-gradient(150deg,#d33b25,#8c171e 48%,#4a0914);box-shadow:0 0 0 5px #7b3015,0 0 0 9px #efc45b,0 24px 55px #090206,inset 0 0 35px #ffd35b44}
+.redesign-lights{display:flex;justify-content:space-around;gap:5px;margin-bottom:9px}.redesign-lights i{width:9px;height:9px;border-radius:50%;background:#fff0a0;box-shadow:0 0 12px #ffca43;animation:blink 1s infinite alternate}.redesign-lights i:nth-child(odd){animation-delay:.3s}
+.redesign-title{display:flex;align-items:flex-end;justify-content:center;gap:10px;margin:-4px auto 12px;position:relative;z-index:2}.redesign-title .mascot{width:min(26vw,210px);height:auto;max-height:165px}.redesign-title>div{border:4px solid #ffcf56;border-radius:25px;padding:8px 24px;background:linear-gradient(#e84c27,#94171b);box-shadow:0 5px #5c160d,inset 0 0 14px #ffce5b66;text-align:center}.redesign-title span{color:#ffed9c;font-size:.7rem;letter-spacing:.25em}.redesign-title h2{margin:0;color:#ffe68c;font:900 clamp(1.5rem,4vw,3rem) Georgia,serif;text-shadow:0 3px #77220e}
+.machine-layout{display:grid;grid-template-columns:minmax(170px,230px) minmax(0,1fr) minmax(170px,230px);gap:14px;align-items:stretch}.side-panel{border:3px solid #eebd4c;border-radius:23px;background:linear-gradient(160deg,#64131b,#30070f);padding:14px;box-shadow:inset 0 0 20px #ffcf4222,0 5px #5e1a11;text-align:center}.side-panel h3{margin:4px 0 10px;color:#ffdf76;text-transform:uppercase;font-size:1rem}.side-balance{color:#ffe48a;font-size:1.25rem;font-weight:1000;margin-bottom:12px}.credit-side .credit-options{grid-template-columns:1fr;gap:8px}.credit-side .credit-button{margin:0;padding:10px 6px;font-size:.9rem;background:linear-gradient(#ffdf77,#d28a25);color:#4b1214;box-shadow:0 3px #7b3213}.credit-side .credit-step{width:100%;background:linear-gradient(#ff6e4b,#bb2027);color:#fff2d0;margin-top:10px}
+.payout-row{display:flex;justify-content:space-between;align-items:center;padding:7px 9px;margin:5px 0;background:#5b1119;border-radius:11px;color:#ffe38b;font-size:1.15rem}.payout-row span{font-size:1.55rem}.turbo-switch{width:100%;margin-top:12px;padding:12px;border-radius:13px;border:2px solid #ffdc79;background:linear-gradient(#9b2724,#64121b);color:#ffedb0;font-weight:900}.turbo-switch.selected{background:linear-gradient(#71d577,#238543);color:#16381b}
+.reel-center{min-width:0}.balance-strip{display:flex;gap:8px;margin-bottom:9px}.balance-strip>div{flex:1;border:2px solid #edbd4b;border-radius:14px;background:#3b0a12;padding:9px;text-align:center}.balance-strip small{display:block;color:#ffd977;font-weight:800;text-transform:uppercase;font-size:.7rem}.balance-strip strong{color:#ffec9c;font-size:clamp(1rem,2vw,1.5rem)}.redesign-reel-frame{padding:10px;border:4px solid #e6b54b;border-radius:23px;background:linear-gradient(#5d1119,#26070d);box-shadow:inset 0 0 25px #0009,0 4px #722311}.redesign-reel-frame .reels{gap:9px}.redesign-reel-frame .cell{aspect-ratio:1;min-height:90px;font-size:clamp(2.7rem,6vw,5rem);border-radius:16px;background:radial-gradient(#fff9e8,#f2c878);border:3px solid #b77c30;box-shadow:inset 0 4px 12px #fff,0 3px #8e4817}
+.redesign-controls{display:grid;grid-template-columns:1fr 1.6fr 1fr;gap:9px;margin-top:10px}.redesign-controls button{min-height:58px;border-radius:16px;font-size:.95rem}.redesign-controls .primary{background:linear-gradient(#a5ef77,#30a443);border:3px solid #d5f29a;color:#163c17;font-size:clamp(1.2rem,3vw,2rem);font-weight:1000;box-shadow:0 5px #20521d}.redesign-controls .secondary{background:linear-gradient(#e8b857,#a95a24);color:#4b1514;border:2px solid #ffe08a}.redesign-bottom{display:flex;justify-content:center;flex-wrap:wrap;gap:9px;margin-top:14px}.redesign-bottom button{border-radius:13px;background:linear-gradient(#e6b75a,#a65325);color:#4a1014;border:2px solid #ffe08a;padding:10px 16px;font-weight:900}
+@media(max-width:780px){.machine-layout{grid-template-columns:1fr}.credit-side{order:2}.reel-center{order:1}.payout-side{order:3}.credit-side .credit-options{grid-template-columns:repeat(3,1fr)}.credit-side .credit-button{font-size:.76rem;padding:8px 3px}.redesign-title .mascot{width:110px}.redesign-title>div{padding:8px 10px}.redesign-reel-frame .cell{min-height:65px}.side-panel{padding:10px}.payout-side{display:grid;grid-template-columns:repeat(3,1fr);gap:5px}.payout-side h3,.turbo-switch{grid-column:1/-1}.payout-row{margin:0;padding:5px}.redesign-controls{grid-template-columns:1fr 1.4fr 1fr}.redesign-controls button{font-size:.75rem;min-height:48px}}
+@media(max-width:430px){.redesign-title{gap:3px}.redesign-title .mascot{width:88px}.redesign-title h2{font-size:1.35rem}.redesign-title>div{padding:5px}.redesign-controls{grid-template-columns:1fr 1.2fr 1fr;gap:5px}.redesign-controls button{padding:7px 3px}.redesign-reel-frame .cell{font-size:2.8rem}.credit-side .credit-options{grid-template-columns:repeat(2,1fr)}}
 `;
