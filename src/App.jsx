@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 /**
- * Tigrinho da Sorte — componente React (React 18+)
+ * Tigrinho do Azar — componente React (React 18+)
  * Uso: importe App.jsx em um projeto Vite/React e renderize <App />.
  * Não requer bibliotecas adicionais. Sons usam Web Audio API.
  */
@@ -18,7 +18,7 @@ const PAYLINES = [[0,1,2],[3,4,5],[6,7,8],[0,4,8],[6,4,2]];
 const BETS = [1, 2, 5, 10, 25, 50];
 const STORAGE_KEY = "tigrinho_sorte_react_v1";
 const BONUS_SPINS = 8;
-const FURY_CHANCE = 0.0025;
+const FURY_CHANCE = 0.0025;\nconst AUTO_FURY_EARLY_CHANCE = 0.05; // chance experimental maior nos 3 primeiros giros de cada Auto
 const RTP_REFERENCE = "não calibrado";
 
 function secureInt(max) {
@@ -61,11 +61,11 @@ function evaluate(grid, bet) {
   });
   return { payout, winners, lines };
 }
-function makeSpin(bet, multiplier = 1, allowFury = true) {
+function makeSpin(bet, multiplier = 1, allowFury = true, furyChance = FURY_CHANCE) {
   const grid = randomGrid();
   let furyColumn = -1;
   // Sorteio de chance especial também usa o RNG criptográfico.
-  if (allowFury && secureInt(100000) < Math.round(FURY_CHANCE * 100000)) {
+  if (allowFury && secureInt(100000) < Math.round(furyChance * 100000)) {
     furyColumn = secureInt(3);
     for (let row=0; row<3; row++) grid[row*3+furyColumn] = "tiger";
   }
@@ -127,7 +127,7 @@ export default function App() {
   const storageReady = useRef(false);
   const spinLock = useRef(false);
   const freeRef = useRef({ freeSpins: 0, freeIndex: 0 });
-  const autoRef = useRef(0);
+  const autoRef = useRef(0);\n  const autoFuryEarlySpins = useRef(0);
   const reducedMotion = useMemo(() => window.matchMedia?.("(prefers-reduced-motion: reduce)").matches, []);
 
   useEffect(() => { freeRef.current = { freeSpins, freeIndex }; }, [freeSpins, freeIndex]);
@@ -217,7 +217,7 @@ export default function App() {
       };
       requestAnimationFrame(animate);
     });
-    const result = makeSpin(bet, multiplier, !free);
+    const autoActive = autoRef.current > 0;\n    const earlyAutoFury = autoActive && autoFuryEarlySpins.current > 0;\n    const result = makeSpin(bet, multiplier, !free, earlyAutoFury ? AUTO_FURY_EARLY_CHANCE : FURY_CHANCE);\n    if (autoActive && autoFuryEarlySpins.current > 0) autoFuryEarlySpins.current -= 1;
     for (let col=0; col<3; col++) {
       await new Promise((r) => window.setTimeout(r, turbo ? 25 : 85));
       setGrid((old) => {
@@ -324,7 +324,7 @@ export default function App() {
       <main className="game-shell">
         <header className="game-header">
           <div className="kicker">✦ FESTIVAL DA FORTUNA ✦</div>
-          <h1>Tigrinho da Sorte</h1>
+          <h1>Tigrinho do Azar</h1>
           <p>Simulação de caça-níquel com valores fictícios em reais 🐯</p>
         </header>
         <section className="machine" aria-label="Máquina de caça-níquel virtual">
