@@ -7,12 +7,12 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
  */
 
 const SYMBOLS = [
-  { id: "orange", label: "Laranja", icon: "🍊", weight: 26, pay: 2 },
-  { id: "firecracker", label: "Petardo", icon: "🧨", weight: 23, pay: 3 },
-  { id: "bag", label: "Saco de moedas", icon: "💰", weight: 20, pay: 5 },
-  { id: "lantern", label: "Lanterna", icon: "🏮", weight: 17, pay: 8 },
-  { id: "coin", label: "Moeda dourada", icon: "🪙", weight: 13, pay: 15 },
-  { id: "tiger", label: "Tigre (curinga)", icon: "🐯", weight: 1, pay: 30 },
+  { id: "orange", label: "Laranja", icon: "🍊", weight: 30, pay: 2 },
+  { id: "firecracker", label: "Petardo", icon: "🧨", weight: 28, pay: 3 },
+  { id: "bag", label: "Saco de moedas", icon: "💰", weight: 24, pay: 5 },
+  { id: "lantern", label: "Lanterna", icon: "🏮", weight: 20, pay: 8 },
+  { id: "coin", label: "Moeda dourada", icon: "🪙", weight: 16, pay: 15 },
+  { id: "tiger", label: "Tigre (curinga)", icon: "🐯", weight: 4, pay: 30 },
 ];
 const PAYLINES = [[0,1,2],[3,4,5],[6,7,8],[0,4,8],[6,4,2]];
 const BETS = [1, 2, 5, 10, 25, 50];
@@ -83,21 +83,28 @@ function makeSpin(bet, multiplier = 1, allowFury = true, furyChance = FURY_CHANC
 
 function TigerMascot({ mode }) {
   return (
-    <svg className={`mascot ${mode}`} viewBox="0 0 160 145" role="img" aria-label="Mascote original de tigre sorridente">
-      <defs><linearGradient id="tigerFur" x2="0" y2="1"><stop stopColor="#ffbd45"/><stop offset="1" stopColor="#e97820"/></linearGradient></defs>
-      <path d="M28 43 18 12 53 29Q80 13 107 29L142 12 132 48Q145 82 126 111Q105 137 80 137Q52 137 32 111Q14 81 28 43Z" fill="url(#tigerFur)" stroke="#6b1b10" strokeWidth="5"/>
-      <path d="M33 37 26 23 47 34M127 37 135 23 114 34" fill="#f58a54" stroke="#6b1b10" strokeWidth="4"/>
-      <path d="M55 31 64 48 76 35M105 31 96 48 84 35M24 65 48 69 34 83M136 65 112 69 126 83" fill="#351015"/>
-      <path d="M52 68Q62 58 72 69M88 69Q99 58 109 68" fill="none" stroke="#401016" strokeWidth="5" strokeLinecap="round"/>
-      <ellipse cx="62" cy="76" rx="5" ry="7" fill="#241016"/><ellipse cx="98" cy="76" rx="5" ry="7" fill="#241016"/>
-      <ellipse cx="80" cy="94" rx="24" ry="18" fill="#ffe1ad"/><path d="M72 89Q80 82 88 89Q80 99 72 89" fill="#4c1115"/>
-      <path d="M80 98Q78 112 65 108M80 98Q82 112 95 108" fill="none" stroke="#7b241a" strokeWidth="3" strokeLinecap="round"/>
-      <path d="M42 105 56 113 47 122M118 105 104 113 113 122" stroke="#401016" strokeWidth="5" fill="none"/>
-      <g fill="#fff1a7"><path d="M14 54 18 43 22 54 33 58 22 62 18 73 14 62 3 58Z"/><path d="M135 94 139 83 143 94 154 98 143 102 139 113 135 102 124 98Z"/></g>
+    <svg className={`mascot ${mode}`} viewBox="0 0 160 145" role="img" aria-label="Rostinho fofo de tigre sorridente">
+      <defs>
+        <radialGradient id="tigerFurCute" cx="45%" cy="30%" r="70%"><stop stopColor="#ffc96c"/><stop offset="1" stopColor="#ef842d"/></radialGradient>
+        <radialGradient id="cheekCute"><stop stopColor="#ffaaa0"/><stop offset="1" stopColor="#ffaaa0" stopOpacity="0"/></radialGradient>
+      </defs>
+      <circle cx="38" cy="42" r="24" fill="#ef842d" stroke="#77341b" strokeWidth="4"/><circle cx="38" cy="42" r="13" fill="#ffb8a3"/>
+      <circle cx="122" cy="42" r="24" fill="#ef842d" stroke="#77341b" strokeWidth="4"/><circle cx="122" cy="42" r="13" fill="#ffb8a3"/>
+      <path d="M20 58Q14 26 42 17Q80 2 118 17Q146 26 140 58Q151 91 127 119Q105 140 80 140Q55 140 33 119Q9 91 20 58Z" fill="url(#tigerFurCute)" stroke="#77341b" strokeWidth="5"/>
+      <path d="M40 35 55 50 44 54M120 35 105 50 116 54M23 71 49 77 34 91M137 71 111 77 126 91M55 20 66 39 78 27M105 20 94 39 82 27" fill="#482019"/>
+      <ellipse cx="59" cy="75" rx="17" ry="21" fill="#fff"/><ellipse cx="101" cy="75" rx="17" ry="21" fill="#fff"/>
+      <ellipse cx="62" cy="78" rx="8" ry="12" fill="#60351c"/><ellipse cx="98" cy="78" rx="8" ry="12" fill="#60351c"/>
+      <ellipse cx="63" cy="79" rx="4" ry="7" fill="#17121a"/><ellipse cx="97" cy="79" rx="4" ry="7" fill="#17121a"/>
+      <circle cx="66" cy="72" r="4" fill="#fff"/><circle cx="100" cy="72" r="4" fill="#fff"/>
+      <ellipse cx="48" cy="99" rx="17" ry="10" fill="#ff9b92" opacity=".65"/><ellipse cx="112" cy="99" rx="17" ry="10" fill="#ff9b92" opacity=".65"/>
+      <ellipse cx="80" cy="100" rx="32" ry="25" fill="#fff0d4"/>
+      <path d="M71 92Q80 84 89 92Q80 103 71 92Z" fill="#6b281d"/>
+      <path d="M80 101Q75 116 61 111M80 101Q85 116 99 111" fill="none" stroke="#9c4b35" strokeWidth="3.5" strokeLinecap="round"/>
+      <path d="M73 116Q80 123 87 116" fill="none" stroke="#9c4b35" strokeWidth="2.5" strokeLinecap="round"/>
+      <path d="M67 132 58 124 52 131M93 132 102 124 108 131" stroke="#482019" strokeWidth="4" fill="none" strokeLinecap="round"/>
     </svg>
   );
 }
-
 export default function App() {
   const [balance, setBalance] = useState(1000);
   const [bet, setBet] = useState(5);
@@ -359,7 +366,7 @@ export default function App() {
             <button className="primary" onClick={spin} disabled={busy || (balance<bet && freeSpins===0) || Date.now()<pauseUntil}>🐯 GIRAR</button>
             <button className={`secondary ${turbo?"selected":""}`} aria-pressed={turbo} onClick={()=>setTurbo(v=>!v)}>⚡ TURBO</button>
           </div>
-          <div className="credit-control"><button className="credit-step" disabled={balance<=0} onClick={()=>{setBalance(v=>Math.max(0,v-10));setStatus("Saldo fictício reduzido em R$ 10,00.");playSound("click");}}>− R$ 10</button><button className="credit-button" onClick={()=>{setBalance(v=>v+10);setStatus("R$ 10,00 de saldo fictício adicionado!");playSound("click");}}>＋ ADICIONAR R$ 10,00</button></div>
+          <div className="credit-control"><div className="credit-options">{[1,5,10,20,50].map(amount=><button key={amount} className="credit-button" onClick={()=>{setBalance(v=>v+amount);setStatus(`R$ ${amount.toFixed(2).replace(".",",")} de saldo fictício adicionado!`);playSound("click");}}>＋ R$ {amount.toFixed(2).replace(".",",")}</button>)}</div><button className="credit-step" disabled={balance<=0} onClick={()=>{setBalance(v=>Math.max(0,v-10));setStatus("Saldo fictício reduzido em R$ 10,00.");playSound("click");}}>− R$ 10,00</button></div>
           <div className="controls extra">
             <button className="secondary" onClick={()=>setModal("rules")}>📜 Regras</button>
             <button className="secondary" onClick={()=>setModal("settings")}>⚙ Configurações</button>
@@ -453,7 +460,7 @@ const styles = `
 .status{min-height:30px;text-align:center;padding:7px 0 2px;font-weight:800;color:#ffe08a;font-size:.9rem}.banner{height:29px;text-align:center;color:#fff1a5;font-size:1.02rem;font-weight:1000;letter-spacing:.08em;text-shadow:0 2px #9a3912}
 .bet-control{display:flex;align-items:center;justify-content:center;gap:10px;margin:12px 0 3px}.bet-control button{width:35px;height:35px;border-radius:50%;border:1px solid #ffdf89;background:#7e1820;color:#ffe7a7;font-weight:1000;font-size:1.15rem}.bet-control button:disabled{opacity:.4}.bet-control div{text-align:center;min-width:110px;font-weight:900;color:#ffe18a}.bet-control small{display:block;color:#f1c785;font-size:.65rem}
 .controls{display:grid;grid-template-columns:1fr 1.4fr 1fr;gap:8px;margin-top:10px}.controls.extra{grid-template-columns:1fr 1fr}
-.credit-button{display:block;width:100%;margin-top:10px;padding:13px 10px;border:2px solid #ffe69a;border-radius:13px;background:linear-gradient(180deg,#72d47c,#218b45);color:#102d15;font-size:.95rem;font-weight:1000;letter-spacing:.025em;box-shadow:0 4px #13542c,0 7px 15px #14040777}.credit-control{display:flex;gap:8px;margin-top:10px}.credit-control .credit-button{flex:1;margin-top:0}.credit-step{padding:10px;border:1px solid #ffd979;border-radius:12px;background:linear-gradient(#ffdca0,#c27a28);color:#4c1012;font-weight:900}.credit-step:disabled{opacity:.4}.credit-button:active{transform:translateY(1px);box-shadow:0 3px #13542c}
+.credit-button{display:block;width:100%;margin-top:10px;padding:13px 10px;border:2px solid #ffe69a;border-radius:13px;background:linear-gradient(180deg,#72d47c,#218b45);color:#102d15;font-size:.95rem;font-weight:1000;letter-spacing:.025em;box-shadow:0 4px #13542c,0 7px 15px #14040777}.credit-control{display:flex;flex-direction:column;gap:8px;margin-top:10px}.credit-options{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}.credit-options .credit-button{padding:9px 5px;font-size:.8rem}.credit-control .credit-button{flex:1;margin-top:0}.credit-step{padding:10px;border:1px solid #ffd979;border-radius:12px;background:linear-gradient(#ffdca0,#c27a28);color:#4c1012;font-weight:900}.credit-step:disabled{opacity:.4}.credit-button:active{transform:translateY(1px);box-shadow:0 3px #13542c}
 .controls button,.gold-button{border:1px solid #ffd979;border-radius:12px;padding:10px 8px;font-weight:900;color:#4c1012;background:linear-gradient(#ffe69a,#d99a35);box-shadow:0 4px #87440f,0 6px 12px #17040977}.controls button:disabled{opacity:.45;cursor:not-allowed}.controls .primary{font-size:1.08rem;background:linear-gradient(#fff0a6,#f0a928)}.controls .secondary{font-size:.83rem;background:linear-gradient(#ffdca0,#c27a28)}.controls .selected{outline:2px solid #fff1a3}
 .panel{margin-top:12px;padding:12px;border:1px solid #c88b35;border-radius:15px;background:#29070ebd;box-shadow:inset 0 0 16px #0005}.panel h2{font-size:.88rem;color:#ffe09a;margin:0 0 9px;letter-spacing:.06em}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}.stats>div,.current-stat{background:#5d141d;border-radius:9px;padding:7px;text-align:center}.stats strong,.current-stat strong{font-size:.94rem;color:#ffe6a0;font-variant-numeric:tabular-nums}.current-stat{margin-top:7px}.history{display:flex;flex-direction:column;gap:5px;max-height:170px;overflow:auto}.history-row{display:flex;justify-content:space-between;font-size:.75rem;padding:5px 7px;background:#55121b;border-radius:7px}.history-row b{color:#ffe18a}
 .footer-actions{display:flex;justify-content:center;gap:8px;margin-top:12px}.footer-actions button{background:transparent;border:1px solid #d69b56;color:#ffdfa0;border-radius:20px;padding:6px 12px;font-size:.74rem}
