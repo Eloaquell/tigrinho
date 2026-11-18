@@ -266,8 +266,9 @@ export default function App() {
     const nextAuto = autoRef.current;
     if (nextAuto > 0) {
       const left = nextAuto - 1;
+      autoRef.current = left;
       setAutoRemaining(left);
-      if (prize >= autoStopWin) { setAutoRemaining(0); setStatus("Automático parou após um prêmio grande."); }
+      if (prize >= autoStopWin) { autoRef.current = 0; setAutoRemaining(0); setStatus("Automático parou após um prêmio grande."); }
       else if (left > 0) window.setTimeout(() => spin(), turbo ? 100 : 330);
     }
   }, [pauseUntil, balance, bet, turbo, reducedMotion, playSound, money, spins, cells, autoStopWin]);
@@ -291,7 +292,7 @@ export default function App() {
   };
   const pauseFive = () => {
     setPauseUntil(Date.now()+5*60*1000);
-    setAutoRemaining(0); setModal(""); setStatus("⏸ Pausa de 5 minutos iniciada.");
+    autoRef.current = 0; setAutoRemaining(0); setModal(""); setStatus("⏸ Pausa de 5 minutos iniciada.");
   };
   const runSimulation = () => {
     // Simulação isolada: não altera saldo, histórico ou estado da sessão.
