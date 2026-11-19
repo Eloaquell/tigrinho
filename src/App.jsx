@@ -122,6 +122,14 @@ export default function App() {
   useEffect(() => { freeRef.current = { freeSpins, freeIndex }; }, [freeSpins, freeIndex]);
   useEffect(() => { autoRef.current = autoRemaining; }, [autoRemaining]);
 
+  useEffect(() => {
+    if (storageReady.current && balance <= 0 && freeSpins <= 0 && !busy) {
+      autoRef.current = 0;
+      setAutoRemaining(0);
+      setModal("empty");
+    }
+  }, [balance, freeSpins, busy]);
+
   // Restaura preferências e saldo; concede bônus diário gratuito.
   useEffect(() => {
     try {
