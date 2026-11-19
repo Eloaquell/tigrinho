@@ -82,28 +82,16 @@ function makeSpin(bet, multiplier = 1, allowFury = true, furyChance = FURY_CHANC
 }
 
 function TigerMascot({ mode }) {
-  return (
-    <svg className={`mascot ${mode}`} viewBox="0 0 160 145" role="img" aria-label="Rostinho fofo de tigre sorridente">
-      <defs>
-        <radialGradient id="tigerFurCute" cx="45%" cy="30%" r="70%"><stop stopColor="#ffc96c"/><stop offset="1" stopColor="#ef842d"/></radialGradient>
-        <radialGradient id="cheekCute"><stop stopColor="#ffaaa0"/><stop offset="1" stopColor="#ffaaa0" stopOpacity="0"/></radialGradient>
-      </defs>
-      <circle cx="38" cy="42" r="24" fill="#ef842d" stroke="#77341b" strokeWidth="4"/><circle cx="38" cy="42" r="13" fill="#ffb8a3"/>
-      <circle cx="122" cy="42" r="24" fill="#ef842d" stroke="#77341b" strokeWidth="4"/><circle cx="122" cy="42" r="13" fill="#ffb8a3"/>
-      <path d="M20 58Q14 26 42 17Q80 2 118 17Q146 26 140 58Q151 91 127 119Q105 140 80 140Q55 140 33 119Q9 91 20 58Z" fill="url(#tigerFurCute)" stroke="#77341b" strokeWidth="5"/>
-      <path d="M40 35 55 50 44 54M120 35 105 50 116 54M23 71 49 77 34 91M137 71 111 77 126 91M55 20 66 39 78 27M105 20 94 39 82 27" fill="#482019"/>
-      <ellipse cx="59" cy="75" rx="17" ry="21" fill="#fff"/><ellipse cx="101" cy="75" rx="17" ry="21" fill="#fff"/>
-      <ellipse cx="62" cy="78" rx="8" ry="12" fill="#60351c"/><ellipse cx="98" cy="78" rx="8" ry="12" fill="#60351c"/>
-      <ellipse cx="63" cy="79" rx="4" ry="7" fill="#17121a"/><ellipse cx="97" cy="79" rx="4" ry="7" fill="#17121a"/>
-      <circle cx="66" cy="72" r="4" fill="#fff"/><circle cx="100" cy="72" r="4" fill="#fff"/>
-      <ellipse cx="48" cy="99" rx="17" ry="10" fill="#ff9b92" opacity=".65"/><ellipse cx="112" cy="99" rx="17" ry="10" fill="#ff9b92" opacity=".65"/>
-      <ellipse cx="80" cy="100" rx="32" ry="25" fill="#fff0d4"/>
-      <path d="M71 92Q80 84 89 92Q80 103 71 92Z" fill="#6b281d"/>
-      <path d="M80 101Q75 116 61 111M80 101Q85 116 99 111" fill="none" stroke="#9c4b35" strokeWidth="3.5" strokeLinecap="round"/>
-      <path d="M73 116Q80 123 87 116" fill="none" stroke="#9c4b35" strokeWidth="2.5" strokeLinecap="round"/>
-      <path d="M67 132 58 124 52 131M93 132 102 124 108 131" stroke="#482019" strokeWidth="4" fill="none" strokeLinecap="round"/>
-    </svg>
-  );
+  return <svg className={`mascot ${mode||""}`} viewBox="0 0 260 220" role="img" aria-label="Tigrinho sorridente apoiado na placa">
+    <defs><radialGradient id="fur3d" cx="42%" cy="25%" r="75%"><stop stopColor="#ffd77b"/><stop offset=".48" stopColor="#ff9e27"/><stop offset="1" stopColor="#c94b16"/></radialGradient><linearGradient id="paw3d" x2="0" y2="1"><stop stopColor="#ffc45c"/><stop offset="1" stopColor="#e8751e"/></linearGradient><radialGradient id="muzzle3d"><stop stopColor="#fff8e8"/><stop offset="1" stopColor="#e8c8a1"/></radialGradient></defs>
+    <path d="M40 87Q12 25 65 22Q93 18 103 48Q130 29 157 48Q171 16 204 28Q245 43 218 94L205 163H54Z" fill="url(#fur3d)" stroke="#713016" strokeWidth="7"/>
+    <path d="M50 69Q28 25 65 34Q84 38 86 66Z" fill="#f5a0a0" stroke="#713016" strokeWidth="5"/><path d="M210 69Q232 25 195 34Q176 38 174 66Z" fill="#f5a0a0" stroke="#713016" strokeWidth="5"/>
+    <path d="M62 42 79 57 67 66M198 42 181 57 193 66M100 26 112 54 126 37M160 26 148 54 134 37M33 89 70 91 48 111M227 89 190 91 212 111" fill="#572414"/>
+    <ellipse cx="93" cy="104" rx="30" ry="36" fill="#fff9ed"/><ellipse cx="167" cy="104" rx="30" ry="36" fill="#fff9ed"/><ellipse cx="98" cy="108" rx="15" ry="22" fill="#a85a24"/><ellipse cx="162" cy="108" rx="15" ry="22" fill="#a85a24"/><ellipse cx="99" cy="110" rx="9" ry="15" fill="#171018"/><ellipse cx="161" cy="110" rx="9" ry="15" fill="#171018"/><circle cx="104" cy="98" r="7" fill="#fff"/><circle cx="166" cy="98" r="7" fill="#fff"/>
+    <path d="M69 85Q92 64 115 82M145 82Q168 64 191 85" fill="none" stroke="#743018" strokeWidth="7" strokeLinecap="round"/>
+    <ellipse cx="130" cy="145" rx="61" ry="43" fill="url(#muzzle3d)"/><ellipse cx="130" cy="126" rx="15" ry="11" fill="#ef8b8e" stroke="#813a31" strokeWidth="3"/><path d="M130 137Q124 151 111 147M130 137Q136 151 149 147" fill="none" stroke="#71372e" strokeWidth="4" strokeLinecap="round"/><path d="M111 153Q130 180 149 153Q146 190 130 190Q114 190 111 153Z" fill="#702020"/><path d="M119 164Q130 157 141 164Q138 179 130 179Q122 179 119 164Z" fill="#ff8290"/>
+    <path d="M43 178Q27 144 58 142Q84 140 99 168L108 198Q79 219 48 203Z" fill="url(#paw3d)" stroke="#713016" strokeWidth="5"/><path d="M217 178Q233 144 202 142Q176 140 161 168L152 198Q181 219 212 203Z" fill="url(#paw3d)" stroke="#713016" strokeWidth="5"/><path d="M50 183 64 194M68 177 79 194M210 183 196 194M192 177 181 194" stroke="#743018" strokeWidth="5" strokeLinecap="round"/>
+  </svg>;
 }
 export default function App() {
   const [balance, setBalance] = useState(1000);
@@ -446,4 +434,17 @@ const styles = `
 .redesign-controls{display:grid;grid-template-columns:1fr 1.6fr 1fr;gap:9px;margin-top:10px}.redesign-controls button{min-height:58px;border-radius:16px;font-size:.95rem}.redesign-controls .primary{background:linear-gradient(#a5ef77,#30a443);border:3px solid #d5f29a;color:#163c17;font-size:clamp(1.2rem,3vw,2rem);font-weight:1000;box-shadow:0 5px #20521d}.redesign-controls .secondary{background:linear-gradient(#e8b857,#a95a24);color:#4b1514;border:2px solid #ffe08a}.redesign-bottom{display:flex;justify-content:center;flex-wrap:wrap;gap:9px;margin-top:14px}.redesign-bottom button{border-radius:13px;background:linear-gradient(#e6b75a,#a65325);color:#4a1014;border:2px solid #ffe08a;padding:10px 16px;font-weight:900}
 @media(max-width:780px){.machine-layout{grid-template-columns:1fr}.credit-side{order:2}.reel-center{order:1}.payout-side{order:3}.credit-side .credit-options{grid-template-columns:repeat(3,1fr)}.credit-side .credit-button{font-size:.76rem;padding:8px 3px}.redesign-title .mascot{width:110px}.redesign-title>div{padding:8px 10px}.redesign-reel-frame .cell{min-height:65px}.side-panel{padding:10px}.payout-side{display:grid;grid-template-columns:repeat(3,1fr);gap:5px}.payout-side h3,.turbo-switch{grid-column:1/-1}.payout-row{margin:0;padding:5px}.redesign-controls{grid-template-columns:1fr 1.4fr 1fr}.redesign-controls button{font-size:.75rem;min-height:48px}}
 @media(max-width:430px){.redesign-title{gap:3px}.redesign-title .mascot{width:88px}.redesign-title h2{font-size:1.35rem}.redesign-title>div{padding:5px}.redesign-controls{grid-template-columns:1fr 1.2fr 1fr;gap:5px}.redesign-controls button{padding:7px 3px}.redesign-reel-frame .cell{font-size:2.8rem}.credit-side .credit-options{grid-template-columns:repeat(2,1fr)}}
+
+body{background:radial-gradient(ellipse at 50% 5%,#3d8ac2 0%,#24476c 28%,#170910 75%) fixed}
+.redesign-machine{position:relative;isolation:isolate;overflow:hidden;background:linear-gradient(180deg,#b92e20 0%,#86151c 52%,#4b0913 100%);border:5px solid #f6c34e;box-shadow:0 0 0 5px #8d3516,0 0 0 9px #f9d66e,0 24px 55px #090206}
+.redesign-machine:before{content:"";position:absolute;inset:0;z-index:-1;opacity:.25;background:repeating-linear-gradient(45deg,transparent 0 18px,#ffd36b 19px 21px,transparent 22px 38px)}
+.redesign-title{align-items:flex-end;gap:0;margin:0 auto 4px}.redesign-title .mascot{width:min(37vw,310px);height:auto;max-height:220px;margin-bottom:-24px;z-index:3;filter:drop-shadow(0 7px 4px #30070b99)}
+.redesign-title>div{margin-left:-12px;flex:1;position:relative;z-index:2;border:5px solid #ffce55;border-radius:34px;padding:10px 18px;background:linear-gradient(180deg,#ff4a16,#b90f16 58%,#7a1017);box-shadow:0 7px 0 #67140f,inset 0 0 0 3px #ff9d28,inset 0 0 20px #ffdf7a55}
+.redesign-title h2{font-family:Georgia,serif;font-weight:1000;letter-spacing:-.04em;color:#ffdf39;-webkit-text-stroke:1px #8a260c;text-shadow:0 3px 0 #8a230b,0 5px 8px #2a0508}
+.redesign-lights i{width:12px;height:12px;background:radial-gradient(circle at 35% 30%,#fff9c7,#ffc63c 65%,#b95c13);border:1px solid #ffe8a0;box-shadow:0 0 12px #ffc84c}
+.side-panel{background:linear-gradient(145deg,#4e0b11,#22050a);border:4px solid #eab13d;box-shadow:inset 0 0 0 2px #ffdb72,inset 0 0 20px #f8b63a33,0 5px #5e1a11}
+.redesign-reel-frame{background:linear-gradient(#8c281b,#4c0b12);border:7px solid #e6a72d;box-shadow:inset 0 0 0 3px #ffdb72,0 5px #63200d}
+.redesign-reel-frame .cell{background:radial-gradient(#fff9e8 0%,#f9d9a0 68%,#e6a64f 100%);border:3px solid #c66a1b;box-shadow:inset 0 4px 12px #fff,0 3px #7e3212}
+@media(max-width:780px){.redesign-title .mascot{width:145px;max-height:145px;margin-bottom:-12px}}
+@media(max-width:430px){.redesign-title .mascot{width:105px;max-height:110px}.redesign-title h2{font-size:1.25rem}}
 `;
